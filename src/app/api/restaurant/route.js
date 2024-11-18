@@ -23,12 +23,36 @@ export async function GET() {
     }
 }
 
+// sign up API
+// export async function POST(request) {
+//     let payload = await request.json();
+//     console.log("payload", payload);
+//     await mongoose.connect(connectionStr,{useNewUrlParser: true, useUnifiedTopology: true})
+//     let restaurant = new restaurantSchema(payload)
+//     const result = await restaurant.save();
+//     return NextResponse.json({result: result, success: true})
+// }
 
+
+// conditionally show login signup page
 export async function POST(request) {
     let payload = await request.json();
-    console.log("payload", payload);
+    let result;
+    let success=false
+    // console.log("payload", payload);
     await mongoose.connect(connectionStr,{useNewUrlParser: true, useUnifiedTopology: true})
-    let restaurant = new restaurantSchema(payload)
-    const result = await restaurant.save();
-    return NextResponse.json({result: result, success: true})
+
+    if(payload.login){
+        result = await restaurantSchema.findOne({email: payload.email, password: payload.password})
+        if(result){
+            success=true
+        }
+    }else{
+        let restaurant = new restaurantSchema(payload)
+        result = await restaurant.save();
+        if(result){
+            success=true
+        }
+    }
+    return NextResponse.json({result: result, success})
 }
