@@ -22,3 +22,13 @@ export async function GET() {
         return NextResponse.json({ result: false, error: error.message });
     }
 }
+
+
+export async function POST(request) {
+    let payload = await request.json();
+    console.log("payload", payload);
+    await mongoose.connect(connectionStr,{useNewUrlParser: true, useUnifiedTopology: true})
+    let restaurant = new restaurantSchema(payload)
+    const result = await restaurant.save();
+    return NextResponse.json({result: result, success: true})
+}
