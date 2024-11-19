@@ -29,7 +29,7 @@ const RestaurantSignup = () => {
         }
 
         // console.log(email, password, c_password, name, address, city, contact);
-        let response = await fetch("http://localhost:3000/api/restaurant", {
+        let response = await fetch("http://localhost:3000/api/restaurant/foods", {
             method: "POST",
             body: JSON.stringify({email, password, name, address, city, contact})
         })
