@@ -6,7 +6,15 @@ const AddFoodItem = () => {
     const [path, setPath] = useState();
     const [description, setDescription] = useState();
 
+    const [error, setError] = useState(false);
+
     const handleAddFoodItem = async() => {
+      if(!name || !price || !path || !description){
+        setError(true);
+        return false
+      }else{
+        setError(false);
+      }
       let resto_id;
         // console.log("hdhdhj", name, price, path, description);
         const restaurantData = JSON.parse(localStorage.getItem("restaurantUser"));
@@ -23,6 +31,8 @@ const AddFoodItem = () => {
         console.log("res", response);
         if(response.success){
           alert("FOOD ITEMS ADDED SUCCESSFULLY")
+        }else{
+          alert("FOOD ITEMS NOT ADDED")
         }
     }
   return (
@@ -30,15 +40,27 @@ const AddFoodItem = () => {
       <h1>ADD NEW FOOD ITEMS</h1>
       <div className='input-wrapper'>
         <input type='text' className='input-field' value={name} placeholder='Enter Food Name' onChange={(e)=> setName(e.target.value)}/>
+        {
+          error && !name && <span className='input-error'>Please enter valid name</span>
+        }
       </div>
       <div className='input-wrapper'>
         <input type='text' className='input-field' value={price} placeholder='Enter Price' onChange={(e)=> setPrice(e.target.value)}/>
+        {
+          error && !price && <span className='input-error'>Please enter valid price</span>
+        }
       </div>
       <div className='input-wrapper'>
         <input type='text' className='input-field' value={path} placeholder='Enter Image Link' onChange={(e)=> setPath(e.target.value)}/>
+        {
+          error && !path && <span className='input-error'>Please enter valid image path</span>
+        }
       </div>
       <div className='input-wrapper'>
         <input type='text' className='input-field' value={description} placeholder='Enter Description' onChange={(e)=> setDescription(e.target.value)}/>
+        {
+          error && !description && <span className='input-error'>Please enter valid description</span>
+        }
       </div>
       <div className='input-wrapper'>
         <button className='button' onClick={handleAddFoodItem}>Add Food Item</button>
