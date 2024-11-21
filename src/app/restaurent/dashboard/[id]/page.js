@@ -1,43 +1,52 @@
+'use client';
+import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
 
-const AddFoodItem = (props) => {
+const EditFoodItem = (props) => {
+    const foodItemId = props.params.id
+    console.log("propms.id", foodItemId);
+    
     const [name, setName] = useState();
     const [price, setPrice] = useState();
     const [path, setPath] = useState();
     const [description, setDescription] = useState();
 
     const [error, setError] = useState(false);
-    const handleAddFoodItem = async() => {
+    const router = useRouter();
+    const handleBack = () => {
+        router.push("../dashboard")
+    }
+
+    const handleUpdateFoodItem = async() => {
       if(!name || !price || !path || !description){
         setError(true);
         return false
       }else{
         setError(false);
       }
-      let resto_id;
-        // console.log("hdhdhj", name, price, path, description);
-        const restaurantData = JSON.parse(localStorage.getItem("restaurantUser"));
-        if(restaurantData){
-          resto_id=restaurantData?._id
-        }
-        console.log("hpl", restaurantData);
-        
-        let response = await fetch("http://localhost:3000/api/restaurant/foods",{
-            method: "POST",
-            body: JSON.stringify({name, price, img_path: path, description, resto_id})
-        });
+    
+    }
+
+    const handleLoadFoodItem = async () => {
+        let response = await fetch(`http://localhost:3000/api/restaurant/foods/edit/${foodItemId}`);
         response = await response.json();
-        console.log("res", response);
+        console.log("ffttt", response);
+        
         if(response.success){
-          alert("FOOD ITEMS ADDED SUCCESSFULLY");
-          props.setAddItem(false);
-        }else{
-          alert("FOOD ITEMS NOT ADDED")
+            setName(response.result.name);
+            setPrice(response.result.price);
+            setPath(response.result.img_path);
+            setDescription(response.result.description);
         }
     }
+
+    useEffect(()=> {
+        handleLoadFoodItem();
+    },[]);
+
   return (
     <div className='container'>
-      <h1>ADD NEW FOOD ITEMS</h1>
+      <h1>UPDATE NEW FOOD ITEMS</h1>
       <div className='input-wrapper'>
         <input type='text' className='input-field' value={name} placeholder='Enter Food Name' onChange={(e)=> setName(e.target.value)}/>
         {
@@ -63,10 +72,13 @@ const AddFoodItem = (props) => {
         }
       </div>
       <div className='input-wrapper'>
-        <button className='button' onClick={handleAddFoodItem}>Add Food Item</button>
+        <button className='button' onClick={handleUpdateFoodItem}>Update Food Item</button>
+      </div>
+      <div className='input-wrapper'>
+        <button className='button' onClick={handleBack}>Back to Food Item List</button>
       </div>
     </div>
   )
 }
 
-export default AddFoodItem
+export default EditFoodItem
