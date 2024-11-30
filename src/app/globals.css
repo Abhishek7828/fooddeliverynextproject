@@ -19,3 +19,17 @@
   color: skyblue;
   margin: 20px;
 }
+.input-error{
+  padding: 8px;
+  position: absolute;
+  color: red;
+  font-size: 13px;
+}
+table, th, td{
+  border: 1px solid #000000ad;
+  border-collapse: collapse;
+  padding: 10px;
+}
+table, tbody, td button{
+  margin: 5px;
+}
